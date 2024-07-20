@@ -1,0 +1,6 @@
+framework module Pods_PawPics {
+  umbrella header "Pods-PawPics-umbrella.h"
+
+  export *
+  module * { export * }
+}
