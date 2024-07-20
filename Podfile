@@ -8,4 +8,8 @@ target 'PawPics' do
   # Pods for PawPics
   #pod 'MyDogsGallery', '~> 0.2.0'
 
+  pod 'SnapKit', '~> 5.7.0'
+  pod 'SDWebImage', '~> 5.0'
+  pod 'ReachabilitySwift'
+
 end

@@ -1,3 +1,26 @@
-PODFILE CHECKSUM: 2969420aae7d383800cb67c2c82d0980b7b7761f
+PODS:
+  - ReachabilitySwift (5.2.3)
+  - SDWebImage (5.19.4):
+    - SDWebImage/Core (= 5.19.4)
+  - SDWebImage/Core (5.19.4)
+  - SnapKit (5.7.1)
+
+DEPENDENCIES:
+  - ReachabilitySwift
+  - SDWebImage (~> 5.0)
+  - SnapKit (~> 5.7.0)
+
+SPEC REPOS:
+  trunk:
+    - ReachabilitySwift
+    - SDWebImage
+    - SnapKit
+
+SPEC CHECKSUMS:
+  ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
+  SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+
+PODFILE CHECKSUM: 47ff1aa4d8a491dd41a04f5e8000dcc133532c5d
 
 COCOAPODS: 1.15.2
