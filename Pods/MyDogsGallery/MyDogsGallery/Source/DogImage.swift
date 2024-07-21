@@ -7,14 +7,14 @@
 import RealmSwift
 
 public class DogImage: Object {
-    @objc dynamic var id: String = UUID().uuidString
-    @objc dynamic var url: String = ""
+    @objc dynamic public var id: String = UUID().uuidString
+    @objc dynamic public var url: String = ""
     
-    public override static func primaryKey() -> String? {
+    override public static func primaryKey() -> String? {
         return "id"
     }
-
-    convenience init(url: String) {
+    
+    public convenience init(url: String) {
         self.init()
         self.url = url
     }

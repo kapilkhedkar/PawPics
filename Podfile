@@ -8,7 +8,7 @@ target 'PawPics' do
   use_frameworks!
 
   # Pods for PawPics
-  pod 'MyDogsGallery', '~> 0.6.0'
+  pod 'MyDogsGallery', '~> 0.7.0'
 
   pod 'SnapKit', '~> 5.7.0'
   pod 'SDWebImage', '~> 5.0'

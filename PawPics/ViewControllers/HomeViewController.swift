@@ -228,10 +228,9 @@ class HomeViewController: UIViewController {
     
     private func bindViewModel() {
         viewModel.imageUpdated = { [weak self] image in
-            if let imageStr = image {
-                guard let url = URL(string: imageStr) else { return }
-                self?.imageView.sd_setImage(with: url)
-            }
+            guard let self = self, let image = image else { return }
+//            let url = URL(string: image.url)
+//            self?.imageView.sd_setImage(with: url)
         }
     }
     

@@ -93,7 +93,7 @@ class HomeViewModel {
             do {
                 let realm = try Realm()
                 try realm.write {
-//                    realm.add(image, update: .modified)
+                    realm.add(image, update: .modified)
                 }
             } catch {
                 print("Failed to store image: \(error.localizedDescription)")

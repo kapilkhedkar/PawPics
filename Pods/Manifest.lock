@@ -1,5 +1,5 @@
 PODS:
-  - MyDogsGallery (0.6.0):
+  - MyDogsGallery (0.7.0):
     - RealmSwift (~> 10.0)
   - ReachabilitySwift (5.2.3)
   - Realm (10.52.2):
@@ -13,7 +13,7 @@ PODS:
   - SnapKit (5.7.1)
 
 DEPENDENCIES:
-  - MyDogsGallery (~> 0.6.0)
+  - MyDogsGallery (~> 0.7.0)
   - ReachabilitySwift
   - RealmSwift (~> 10)
   - SDWebImage (~> 5.0)
@@ -31,13 +31,13 @@ SPEC REPOS:
     - SnapKit
 
 SPEC CHECKSUMS:
-  MyDogsGallery: d66ac684fd771390e5995d4f31c89128c1f9212a
+  MyDogsGallery: ba04ac54f51f04c07a8bc0d08fe351dfb32ae33f
   ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
   Realm: e44eb7d20fe469fe1179894fd356727b8fbe61c2
   RealmSwift: 7aacbd3101158f7d54c930bcfcfaafadbd376ffc
   SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
 
-PODFILE CHECKSUM: 30fd70f49f1b6c8a7522620c20a2fa6a5f9ebbe9
+PODFILE CHECKSUM: 422135fc254adf739f691ab8421fe6d467762ac9
 
 COCOAPODS: 1.15.2
