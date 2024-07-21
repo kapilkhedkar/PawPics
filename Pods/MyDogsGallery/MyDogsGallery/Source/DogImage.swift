@@ -4,9 +4,20 @@
 //
 //  Created by Kapil Khedkar on 20/07/24.
 //
+import RealmSwift
 
-public struct DogImage: Decodable {
-    public let url: String
+public class DogImage: Object {
+    @objc dynamic var id: String = UUID().uuidString
+    @objc dynamic var url: String = ""
+    
+    public override static func primaryKey() -> String? {
+        return "id"
+    }
+
+    convenience init(url: String) {
+        self.init()
+        self.url = url
+    }
 }
 
 public struct DogImageResponse: Decodable {
