@@ -5,9 +5,11 @@
 //  Created by Kapil Khedkar on 20/07/24.
 //
 
-import RealmSwift
+public struct DogImage: Decodable {
+    public let url: String
+}
 
-public class DogImage: Object {
-    @Persisted(primaryKey: true) var id: ObjectId
-    @Persisted var url: String
+public struct DogImageResponse: Decodable {
+    let message: String
+    let status: String
 }

@@ -6,25 +6,24 @@
 //
 
 import Foundation
-import RealmSwift
 
 public class DogImageFetcher {
     
-    private var realm: Realm {
-        return try! Realm()
-    }
-    private var images: Results<DogImage>!
-    private var currentIndex = -1
-    
     public init() {
-        loadImagesFromDatabase()
+        
     }
     
-    public func getImage(completion: @escaping (Result<String, Error>) -> Void) {
-        let urlString = Constants.baseUrl
-        
+    public func getImage(completion: @escaping (Result<DogImage, Error>) -> Void) {
+        fetchData(from: Constants.baseUrl, completion: completion)
+    }
+    
+    public func getNextImage(completion: @escaping (Result<DogImage, Error>) -> Void) {
+        fetchData(from: Constants.baseUrl, completion: completion)
+    }
+    
+    private func fetchData(from urlString: String, completion: @escaping (Result<DogImage, Error>) -> Void) {
         guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+            completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
         }
         
@@ -35,48 +34,19 @@ public class DogImageFetcher {
             }
             
             guard let data = data else {
-                completion(.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
+                completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
                 return
             }
             
             do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let status = json["status"] as? String, status == "success",
-                   let imageUrl = json["message"] as? String {
-                    self.saveImageToDatabase(url: imageUrl)
-                    self.currentIndex = self.images.count - 1
-                    completion(.success(imageUrl))
-                } else {
-                    completion(.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
-                }
-            } catch let parseError {
-                completion(.failure(parseError))
+                let response = try JSONDecoder().decode(DogImageResponse.self, from: data)
+                let dogImage = DogImage(url: response.message)
+                completion(.success(dogImage))
+            } catch {
+                completion(.failure(error))
             }
         }
-        
         task.resume()
-    }
-    
-    public func getNextImage(completion: @escaping (Result<String, Error>) -> Void) {
-        let nextIndex = currentIndex + 1
-        if nextIndex < images.count {
-            currentIndex = nextIndex
-            let imageUrl = images[nextIndex].url
-            completion(.success(imageUrl))
-        } else {
-            getImage(completion: completion)
-        }
-    }
-    
-    public func getPreviousImage(completion: @escaping (Result<String, Error>) -> Void) {
-        let previousIndex = currentIndex - 1
-        if previousIndex >= 0 {
-            currentIndex = previousIndex
-            let imageUrl = images[previousIndex].url
-            completion(.success(imageUrl))
-        } else {
-            completion(.failure(NSError(domain: "No previous image", code: 0, userInfo: nil)))
-        }
     }
     
     public func getImages(number: Int, completion: @escaping (Result<[String], Error>) -> Void) {
@@ -112,24 +82,5 @@ public class DogImageFetcher {
         }
         
         task.resume()
-    }
-    
-    private func saveImageToDatabase(url: String) {
-        DispatchQueue.global().async {
-            do {
-                let image = DogImage()
-                image.url = url
-                try self.realm.write {
-                    self.realm.add(image)
-                }
-                self.loadImagesFromDatabase()
-            } catch {
-                print("Error saving image to database: \(error)")
-            }
-        }
-    }
-    
-    private func loadImagesFromDatabase() {
-        images = realm.objects(DogImage.self)
     }
 }
