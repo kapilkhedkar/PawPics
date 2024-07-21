@@ -115,15 +115,17 @@ public class DogImageFetcher {
     }
     
     private func saveImageToDatabase(url: String) {
-        do {
-            let image = DogImage()
-            image.url = url
-            try realm.write {
-                realm.add(image)
+        DispatchQueue.global().async {
+            do {
+                let image = DogImage()
+                image.url = url
+                try self.realm.write {
+                    self.realm.add(image)
+                }
+                self.loadImagesFromDatabase()
+            } catch {
+                print("Error saving image to database: \(error)")
             }
-            loadImagesFromDatabase()
-        } catch {
-            print("Error saving image to database: \(error)")
         }
     }
     
