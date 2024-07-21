@@ -74,6 +74,7 @@ class GridViewController: UIViewController {
             // Fallback on earlier versions
             activityIndicator = UIActivityIndicatorView(style: .gray)
         }
+        activityIndicator.color = .appPrimary
         activityIndicator.hidesWhenStopped = true
         view.addSubview(activityIndicator)
     }

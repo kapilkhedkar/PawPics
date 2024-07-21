@@ -44,52 +44,58 @@ class HomeViewModel {
     }
     
     func fetchNextImage() {
-        dogImageFetcher.getNextImage { [weak self] result in
-            switch result {
-            case .success(let image):
-                self?.storeImage(image)
-                DispatchQueue.main.async {
-                    self?.currentImage = image
-                    if let currentIndex = self?.currentIndex, currentIndex + 1 < self?.images.count ?? 0 {
-                        self?.images[currentIndex + 1] = image
-                    } else {
-                        self?.images.append(image)
+        
+        let nextIndex = currentIndex + 1
+        
+        // Check if the next image is available in the database
+        if let nextImage = getImage(at: nextIndex) {
+            // Load image from the database
+            DispatchQueue.main.async { [weak self] in
+                self?.currentIndex = nextIndex
+                self?.currentImage = nextImage
+                self?.imageUpdated?(nextImage)
+            }
+        } else {
+            dogImageFetcher.getNextImage { [weak self] result in
+                switch result {
+                case .success(let image):
+                    self?.storeImage(image)
+                    DispatchQueue.main.async {
+                        self?.currentImage = image
+                        if let currentIndex = self?.currentIndex, currentIndex + 1 < self?.images.count ?? 0 {
+                            self?.images[currentIndex + 1] = image
+                        } else {
+                            self?.images.append(image)
+                        }
+                        self?.currentIndex += 1
+                        self?.imageUpdated?(image)
                     }
-                    self?.currentIndex += 1
-                    self?.imageUpdated?(image)
-                }
-            case .failure(let error):
-                print("Failed to fetch next image: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self?.imageUpdated?(nil)
+                case .failure(let error):
+                    print("Failed to fetch next image: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self?.imageUpdated?(nil)
+                    }
                 }
             }
         }
+        
     }
     
     func fetchPreviousImage() {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
-            do {
-                guard self.currentIndex > 0 else {
-                    throw NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "No previous image available"])
-                }
-                self.currentIndex -= 1
-                let previousImage = self.images[self.currentIndex]
-                DispatchQueue.main.async {
-                    self.imageUpdated?(previousImage)
-                }
-            } catch {
-                print("Failed to fetch previous image: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self.imageUpdated?(nil)
-                }
+        guard self.currentIndex > 0 else {
+            print("No previous image available")
+            return
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.currentIndex -= 1
+            if let prevImage = self?.getImage(at: self!.currentIndex) {
+                self?.imageUpdated?(prevImage)
             }
         }
     }
     
     private func storeImage(_ image: DogImage) {
-        DispatchQueue.global().async {
+        DispatchQueue.main.async {
             do {
                 let realm = try Realm()
                 try realm.write {
@@ -108,5 +114,13 @@ class HomeViewModel {
     
     func numberOfImages() -> Int {
         return images.count
+    }
+    
+    func hasPrevious()->Bool {
+        if self.currentIndex > 0 {
+            return true
+        } else {
+            return false
+        }
     }
 }

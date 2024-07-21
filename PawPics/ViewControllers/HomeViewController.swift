@@ -41,7 +41,7 @@ class HomeViewController: UIViewController {
     private let textField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .numberPad
-        textField.placeholder = "Enter a no. between 1 & 10"
+        textField.placeholder = "Enter a number between 1 & 10"
         return textField
     }()
     
@@ -53,7 +53,7 @@ class HomeViewController: UIViewController {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .redraw
         return imageView
     }()
     
@@ -87,6 +87,7 @@ class HomeViewController: UIViewController {
         setupActions()
         setupReachability()
         bindViewModel()
+        activityIndicator.startAnimating()
         viewModel.fetchImage()
     }
     
@@ -173,8 +174,12 @@ class HomeViewController: UIViewController {
             // Fallback on earlier versions
             activityIndicator = UIActivityIndicatorView(style: .gray)
         }
+        activityIndicator.color = .appPrimary
         activityIndicator.hidesWhenStopped = true
         view.addSubview(activityIndicator)
+        
+        previousButton.isEnabled = false
+        previousButton.alpha = 0.5
     }
     
     private func setupConstraints() {
@@ -222,15 +227,23 @@ class HomeViewController: UIViewController {
             make.height.equalTo(40)
         }
         activityIndicator.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.center.equalTo(imageView)
         }
     }
     
     private func bindViewModel() {
         viewModel.imageUpdated = { [weak self] image in
             guard let self = self, let image = image else { return }
-//            let url = URL(string: image.url)
-//            self?.imageView.sd_setImage(with: url)
+            let url = URL(string: image.url)
+            self.imageView.sd_setImage(with: url)
+            if viewModel.hasPrevious() {
+                previousButton.isEnabled = true
+                previousButton.alpha = 1.0
+            } else {
+                previousButton.isEnabled = false
+                previousButton.alpha = 0.5
+            }
+            activityIndicator.stopAnimating()
         }
     }
     
@@ -242,6 +255,7 @@ class HomeViewController: UIViewController {
     
     @objc private func handleSubmit() {
         guard let numberText = textField.text, let number = Int(numberText), number > 0, number <= 10 else {
+            showValidationAlert()
             return
         }
         
@@ -255,7 +269,20 @@ class HomeViewController: UIViewController {
     }
     
     @objc private func handleNext() {
+        activityIndicator.startAnimating()
         viewModel.fetchNextImage()
+    }
+    
+    @objc func showValidationAlert() {
+        // Create the alert controller
+        let alertController = UIAlertController(title: "Please enter a number between 1 & 10", message: "", preferredStyle: .alert)
+        
+        // Add the Cancel action
+        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        // Present the alert controller
+        present(alertController, animated: true, completion: nil)
     }
     
 
