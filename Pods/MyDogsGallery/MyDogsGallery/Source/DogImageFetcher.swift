@@ -10,21 +10,14 @@ import RealmSwift
 
 public class DogImageFetcher {
     
-    private var realm: Realm!
+    private var realm: Realm {
+        return try! Realm()
+    }
     private var images: Results<DogImage>!
     private var currentIndex = -1
     
     public init() {
-        setupRealm()
         loadImagesFromDatabase()
-    }
-    
-    private func setupRealm() {
-        do {
-            realm = try Realm()
-        } catch {
-            print("Error setting up Realm: \(error)")
-        }
     }
     
     public func getImage(completion: @escaping (Result<String, Error>) -> Void) {
