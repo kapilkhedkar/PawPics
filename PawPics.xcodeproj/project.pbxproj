@@ -13,6 +13,7 @@
 		BD5C18CF2C4BF6ED0095CCD0 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD5C18CC2C4BF6ED0095CCD0 /* Montserrat-Regular.ttf */; };
 		BD5C18D02C4BF6ED0095CCD0 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD5C18CD2C4BF6ED0095CCD0 /* Montserrat-SemiBold.ttf */; };
 		BD5C18D22C4BF7270095CCD0 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5C18D12C4BF7270095CCD0 /* UIFont+Extension.swift */; };
+		BD60274D2C4C2A110001116D /* GridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD60274C2C4C2A110001116D /* GridViewModel.swift */; };
 		BDDDF6C02C4BE5E700362DED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDDF6BF2C4BE5E700362DED /* AppDelegate.swift */; };
 		BDDDF6C72C4BE5E700362DED /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BDDDF6C62C4BE5E700362DED /* Base */; };
 		BDDDF6C92C4BE5E900362DED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDDDF6C82C4BE5E900362DED /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 		BD5C18CC2C4BF6ED0095CCD0 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		BD5C18CD2C4BF6ED0095CCD0 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		BD5C18D12C4BF7270095CCD0 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
+		BD60274C2C4C2A110001116D /* GridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridViewModel.swift; sourceTree = "<group>"; };
 		BDDDF6BC2C4BE5E700362DED /* PawPics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawPics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDDDF6BF2C4BE5E700362DED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BDDDF6C62C4BE5E700362DED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				BD5C18C72C4BF1C80095CCD0 /* HomeViewModel.swift */,
+				BD60274C2C4C2A110001116D /* GridViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD60274D2C4C2A110001116D /* GridViewModel.swift in Sources */,
 				BD5C18C62C4BF18D0095CCD0 /* HomeViewController.swift in Sources */,
 				BD5C18C82C4BF1C80095CCD0 /* HomeViewModel.swift in Sources */,
 				BD5C18C42C4BF0180095CCD0 /* GridViewController.swift in Sources */,

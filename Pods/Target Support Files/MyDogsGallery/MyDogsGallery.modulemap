@@ -1,0 +1,6 @@
+framework module MyDogsGallery {
+  umbrella header "MyDogsGallery-umbrella.h"
+
+  export *
+  module * { export * }
+}

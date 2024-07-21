@@ -11,13 +11,17 @@ import SDWebImage
 
 class GridViewController: UIViewController {
     
+    private var activityIndicator: UIActivityIndicatorView!
+    
+    private let viewModel = GridViewModel()
+    
     private let headerView = UIView()
     private let backButton = UIButton()
     
-    private let images: [String]
+    var imageCount: Int = 0
     
-    init(images: [String]) {
-        self.images = images
+    init(imageCount: Int) {
+        self.imageCount = imageCount
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -42,6 +46,17 @@ class GridViewController: UIViewController {
         collectionView.dataSource = self
         setupViews()
         setupConstraints()
+        getImages()
+    }
+    
+    func getImages() {
+        activityIndicator.startAnimating()
+        viewModel.fetchImages(count: imageCount, completion: {
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.collectionView.reloadData()
+            }
+        })
     }
     
     private func setupViews() {
@@ -53,6 +68,14 @@ class GridViewController: UIViewController {
         headerView.addSubview(backButton)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         view.addSubview(collectionView)
+        if #available(iOS 13.0, *) {
+            activityIndicator = UIActivityIndicatorView(style: .large)
+        } else {
+            // Fallback on earlier versions
+            activityIndicator = UIActivityIndicatorView(style: .gray)
+        }
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
     }
     
     private func setupConstraints() {
@@ -69,6 +92,9 @@ class GridViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
+        }
+        activityIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
     
@@ -91,16 +117,19 @@ class GridViewController: UIViewController {
 extension GridViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return viewModel.numberOfImages()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         cell.contentView.backgroundColor = .lightGray
         
+        
         let imageView = UIImageView()
         imageView.contentMode = .redraw
-        imageView.sd_setImage(with: URL(string: images[indexPath.row]))
+        if let image = viewModel.getImage(at: indexPath.row) {
+            imageView.sd_setImage(with: URL(string: image))
+        }
         cell.contentView.addSubview(imageView)
         
         imageView.snp.makeConstraints { make in

@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import SDWebImage
 import Reachability
+import MyDogsGallery
 
 class HomeViewController: UIViewController {
     
@@ -33,7 +34,7 @@ class HomeViewController: UIViewController {
         return label
     }()
 
-    private let viewModel = HomeViewModel()
+    private let viewModel = HomeViewModel(dogImageFetcher: DogImageFetcher())
     
     private let mainView = UIView()
     
@@ -85,6 +86,8 @@ class HomeViewController: UIViewController {
         setupConstraints()
         setupActions()
         setupReachability()
+        bindViewModel()
+        viewModel.fetchImage()
     }
     
     func setupReachability() {
@@ -223,8 +226,19 @@ class HomeViewController: UIViewController {
         }
     }
     
+    private func bindViewModel() {
+        viewModel.imageUpdated = { [weak self] image in
+            if let imageStr = image {
+                guard let url = URL(string: imageStr) else { return }
+                self?.imageView.sd_setImage(with: url)
+            }
+        }
+    }
+    
     private func setupActions() {
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
+        previousButton.addTarget(self, action: #selector(handlePrevious), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(handleNext), for: .touchUpInside)
     }
     
     @objc private func handleSubmit() {
@@ -232,13 +246,17 @@ class HomeViewController: UIViewController {
             return
         }
         
-        viewModel.fetchImages(number: number) {
-            DispatchQueue.main.async {
-                let gridVC = GridViewController(images: self.viewModel.images)
-                gridVC.modalPresentationStyle = .fullScreen
-                self.present(gridVC, animated: true)
-            }
-        }
+        let gridVC = GridViewController(imageCount: number)
+        gridVC.modalPresentationStyle = .fullScreen
+        self.present(gridVC, animated: true)
+    }
+    
+    @objc private func handlePrevious() {
+        viewModel.fetchPreviousImage()
+    }
+    
+    @objc private func handleNext() {
+        viewModel.fetchNextImage()
     }
     
 
